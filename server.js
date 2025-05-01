@@ -4,9 +4,27 @@ const cors = require('cors');
 
 const app = express();
 
+// CORS Configuration
+const corsOptions = {
+  origin: ['http://localhost:3000', 'https://agi-timeline-tracker.netlify.app'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    error: 'Something went wrong!',
+    message: err.message 
+  });
+});
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/development';
@@ -49,7 +67,7 @@ app.get('/predictions', async (req, res) => {
         expert: "Geoffrey Hinton",
         organization: "Google",
         predictionDate: "2023-05-01",
-        estimatedDate: "2070",
+        estimatedDate: "2070-2075",
         definition: "AGI will be able to do any intellectual task that a human can do",
         source: "Interview with The Guardian"
       },
@@ -57,7 +75,7 @@ app.get('/predictions', async (req, res) => {
         expert: "Yann LeCun",
         organization: "Meta AI",
         predictionDate: "2022-12-15",
-        estimatedDate: "2050-2100",
+        estimatedDate: "2050-2060",
         definition: "Human-level artificial general intelligence",
         source: "Twitter/X Post"
       }
