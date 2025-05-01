@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/agi-timeline-tracker';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/development';
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Could not connect to MongoDB:', err));
@@ -40,8 +40,64 @@ app.get('/health', async (req, res) => {
   }
 });
 
+// Get all predictions
+app.get('/predictions', async (req, res) => {
+  try {
+    // For now, return sample data until we set up the database schema
+    const samplePredictions = [
+      {
+        expert: "Geoffrey Hinton",
+        organization: "Google",
+        predictionDate: "2023-05-01",
+        estimatedDate: "2070",
+        definition: "AGI will be able to do any intellectual task that a human can do",
+        source: "Interview with The Guardian"
+      },
+      {
+        expert: "Yann LeCun",
+        organization: "Meta AI",
+        predictionDate: "2022-12-15",
+        estimatedDate: "2050-2100",
+        definition: "Human-level artificial general intelligence",
+        source: "Twitter/X Post"
+      }
+    ];
+    res.json(samplePredictions);
+  } catch (error) {
+    res.status(500).json({ 
+      error: 'Error fetching predictions',
+      details: error.message 
+    });
+  }
+});
+
+// Get timeline data
+app.get('/timeline', async (req, res) => {
+  try {
+    // For now, return sample timeline data
+    const timelineData = [
+      {
+        expert: "Geoffrey Hinton",
+        year: 2070,
+        confidence: "high"
+      },
+      {
+        expert: "Yann LeCun",
+        year: 2075,
+        confidence: "medium"
+      }
+    ];
+    res.json(timelineData);
+  } catch (error) {
+    res.status(500).json({ 
+      error: 'Error fetching timeline data',
+      details: error.message 
+    });
+  }
+});
+
 // Start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000; // Railway will provide the PORT
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
