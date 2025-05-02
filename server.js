@@ -4,17 +4,13 @@ const cors = require('cors');
 
 const app = express();
 
-// CORS Configuration
-const corsOptions = {
-  origin: ['http://localhost:3000', 'https://agi-timeline-tracker.netlify.app'],
+// CORS Configuration - More permissive for debugging
+app.use(cors({
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  optionsSuccessStatus: 200
-};
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// Middleware
-app.use(cors(corsOptions));
 app.use(express.json());
 
 // Error handling middleware
