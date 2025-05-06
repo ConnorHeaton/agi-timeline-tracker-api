@@ -88,19 +88,23 @@ app.get('/predictions', async (req, res) => {
 // Get timeline data
 app.get('/timeline', async (req, res) => {
   try {
-    // For now, return sample timeline data
-    const timelineData = [
-      {
-        expert: "Geoffrey Hinton",
-        year: 2070,
-        confidence: "high"
-      },
-      {
-        expert: "Yann LeCun",
-        year: 2075,
-        confidence: "medium"
-      }
-    ];
+    const predictions = await Prediction.find()
+      .populate('expertId', 'name organization title')
+      .sort({ predictionDate: -1 });
+    
+    const timelineData = predictions.map(prediction => ({
+      expert: prediction.expertName,
+      estimatedDate: prediction.estimatedDate,
+      source: prediction.source,
+      sourceUrl: prediction.sourceUrl,
+      predictionDate: prediction.predictionDate,
+      definition: prediction.definition,
+      definitionSummary: prediction.definitionSummary,
+      confidence: prediction.confidence,
+      organizationAtTime: prediction.organizationAtTime,
+      titleAtTime: prediction.titleAtTime
+    }));
+
     res.json(timelineData);
   } catch (error) {
     res.status(500).json({ 
