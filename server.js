@@ -69,7 +69,10 @@ app.get('/timeline', async (req, res) => {
       estimatedDate: prediction.estimatedDate,
       source: prediction.source,
       sourceUrl: prediction.sourceUrl,
-      predictionDate: prediction.predictionDate,
+      predictionDate: prediction.predictionDate.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long'
+      }),
       definition: prediction.definition,
       definitionSummary: prediction.definitionSummary
     }));
