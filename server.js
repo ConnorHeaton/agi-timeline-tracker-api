@@ -56,37 +56,6 @@ app.get('/health', async (req, res) => {
   }
 });
 
-// Get all predictions
-app.get('/predictions', async (req, res) => {
-  try {
-    // For now, return sample data until we set up the database schema
-    const samplePredictions = [
-      {
-        expert: "Geoffrey Hinton",
-        organization: "Google",
-        predictionDate: "2023-05-01",
-        estimatedDate: "2070-2075",
-        definition: "AGI will be able to do any intellectual task that a human can do",
-        source: "Interview with The Guardian"
-      },
-      {
-        expert: "Yann LeCun",
-        organization: "Meta AI",
-        predictionDate: "2022-12-15",
-        estimatedDate: "2050-2060",
-        definition: "Human-level artificial general intelligence",
-        source: "Twitter/X Post"
-      }
-    ];
-    res.json(samplePredictions);
-  } catch (error) {
-    res.status(500).json({ 
-      error: 'Error fetching predictions',
-      details: error.message 
-    });
-  }
-});
-
 // Get timeline data
 app.get('/timeline', async (req, res) => {
   try {
@@ -96,15 +65,13 @@ app.get('/timeline', async (req, res) => {
     
     const timelineData = predictions.map(prediction => ({
       expert: prediction.expertName,
+      organization: prediction.organizationAtTime,
       estimatedDate: prediction.estimatedDate,
       source: prediction.source,
       sourceUrl: prediction.sourceUrl,
       predictionDate: prediction.predictionDate,
       definition: prediction.definition,
-      definitionSummary: prediction.definitionSummary,
-      confidence: prediction.confidence,
-      organizationAtTime: prediction.organizationAtTime,
-      titleAtTime: prediction.titleAtTime
+      definitionSummary: prediction.definitionSummary
     }));
 
     res.json(timelineData);
